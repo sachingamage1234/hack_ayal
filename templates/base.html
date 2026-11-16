@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ event.name }}: {{ event.tagline }}{% endblock %}</title>
+  <meta name="description" content="{{ event.name }}, a {{ event.duration }} hackathon on {{ event.date_text }}. Build something worthy of the gods.">
+  <meta name="theme-color" content="#150708">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Metamorphous&family=Cinzel:wght@500;700&family=GFS+Didot&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="{{ url_for('index') }}">
+      <span class="nav__bolt" aria-hidden="true">⚡</span> {{ event.name }}
+    </a>
+    <button class="nav__toggle" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav__menu" id="menu" aria-label="Main">
+      <a href="{{ url_for('index') }}#about">The trial</a>
+      <a href="{{ url_for('index') }}#pantheon">Pantheon</a>
+      <a href="{{ url_for('index') }}#journey">Journey</a>
+      <a href="{{ url_for('index') }}#prizes">Prizes</a>
+      <a href="{{ url_for('index') }}#faq">FAQ</a>
+      <a class="btn btn--small" href="{{ url_for('index') }}#register">Register</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="meander" aria-hidden="true"></div>
+    <div class="footer__inner">
+      <p class="footer__brand">{{ event.name }}</p>
+      <p>{{ event.date_text }} · {{ event.venue }}</p>
+      <p><a href="mailto:{{ event.contact }}">{{ event.contact }}</a></p>
+      <p class="footer__greek" lang="el">ΟΛΥΜΠΙΑΚΟΣ ΑΓΩΝ</p>
+      <p class="footer__small">Made by mortals, judged by gods.</p>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/pantheon.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/fx.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/wings.js') }}" defer></script>
+</body>
+</html>

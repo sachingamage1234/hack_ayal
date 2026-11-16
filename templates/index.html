@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- HERO -->
+<section data-fx="fire" class="hero {% if not zeus_url %}hero--noimg{% endif %}" aria-labelledby="hero-title">
+  <div class="hero__bg" {% if zeus_url %}style="--zeus-img:url('{{ zeus_url }}')"{% endif %}></div>
+  <div class="hero__flash" aria-hidden="true"></div>
+  <svg class="hero__bolt" viewBox="0 0 200 400" aria-hidden="true">
+    <path d="M120 0 L40 190 H96 L64 400 L170 150 H110 L150 0Z" fill="#FFC529"/>
+  </svg>
+  <div class="hero__content">
+    <p class="hero__date">{{ event.date_text }} · {{ event.duration }} · {{ event.venue }}</p>
+    <h1 id="hero-title">{{ event.name }}</h1>
+    <p class="hero__tag">{{ event.tagline }}</p>
+    <div class="hero__cta">
+      <a class="btn" href="#register">Claim your place</a>
+      <a class="btn btn--ghost" href="#pantheon">Meet the pantheon</a>
+    </div>
+    <div class="countdown" data-target="{{ event.date_iso }}" role="timer" aria-label="Time until the opening ceremony">
+      <div><b data-unit="d">00</b><span>days</span></div>
+      <div><b data-unit="h">00</b><span>hours</span></div>
+      <div><b data-unit="m">00</b><span>minutes</span></div>
+      <div><b data-unit="s">00</b><span>seconds</span></div>
+    </div>
+  </div>
+  <a class="hero__scroll" href="#strike" aria-label="Scroll down"><span></span></a>
+</section>
+
+<!-- SPEAR STRIKE (scroll-driven) -->
+<section class="strike" data-fx="fire" id="strike" aria-labelledby="strike-title">
+  <div class="strike__stage" id="strike-stage">
+    <div class="spear spear--left" id="spear-l"><img src="{{ url_for('static', filename='img/spear.png') }}" alt="" width="1600" height="267" decoding="async"></div>
+    <div class="spear spear--right" id="spear-r"><img src="{{ url_for('static', filename='img/spear.png') }}" alt="" width="1600" height="267" decoding="async"></div>
+    <div class="strike__impact" aria-hidden="true"></div>
+    <div class="strike__copy">
+      <h2 id="strike-title">The gauntlet is thrown</h2>
+      <p>Two spears, one challenge. Thirty-six hours to turn an idea into something the gods would put on their wall.</p>
+      <a class="btn" href="#register">Accept the challenge</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" data-fx="fire" id="about" aria-labelledby="about-title">
+  <div class="wrap wrap--split">
+    <div>
+      <h2 id="about-title">A trial for the bold</h2>
+      <p class="lead">Hack Olympus is a weekend hackathon where students and professionals build real projects against the clock, guided by mentors and judged by industry practitioners.</p>
+      <p>Pick a god's domain, form a team of up to four, and ship a working demo. Beginners are welcome. Every team gets a mentor in their corner.</p>
+    </div>
+    <ul class="rules">
+      <li><b>Build</b> from scratch during the event. Planning beforehand is fine.</li>
+      <li><b>Demo</b> your project live for five minutes. Working beats polished.</li>
+      <li><b>Share</b> your code. Judges will look at the repository, so keep it open.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- PANTHEON / TRACKS -->
+<section class="section section--jade pantheon" id="pantheon" data-fx="leaf" aria-labelledby="pantheon-title">
+  <div class="meander" aria-hidden="true"></div>
+
+  <figure class="pantheon__art" id="pantheon-art">
+    <img src="{{ url_for('static', filename='img/pantheon.jpg') }}" width="1672" height="941" alt="Zeus, Athena, Hephaestus, Poseidon, Apollo and Ares standing before a golden temple" decoding="async">
+    <span class="dim" aria-hidden="true"></span>
+    <span class="spot" aria-hidden="true"></span>
+    <figcaption class="pantheon__title"><h2 id="pantheon-title">Choose your patron</h2></figcaption>
+
+    {# slug, hotspot left %, hotspot width %, spotlight centre %, spotlight radius % #}
+    {% set spots = [('zeus',0,21,13,14),('athena',21,16,29,12),('hephaestus',37,16,45,12),('poseidon',53,19,61,15),('apollo',72,14,78,11),('ares',86,14,92,11)] %}
+    {% for slug, left, width, cx, r in spots %}
+      {% set t = tracks|selectattr('slug','equalto',slug)|first %}
+      <a class="hot{% if loop.first %} hot--first{% endif %}{% if loop.last %} hot--last{% endif %}"
+         href="{{ url_for('track', slug=slug) }}" style="left:{{ left }}%;width:{{ width }}%"
+         data-x="{{ cx }}" data-r="{{ r }}" aria-label="{{ t.god }}: {{ t.domain }}">
+        <span class="hot__label">
+          <b>{{ t.god }}</b>
+          <em>{{ t.domain }}</em>
+          <span class="hot__blurb">{{ t.blurb }}</span>
+          <i>See challenges</i>
+        </span>
+        <span class="hot__data" hidden data-god="{{ t.god }}" data-domain="{{ t.domain }}" data-blurb="{{ t.blurb }}"></span>
+      </a>
+    {% endfor %}
+  </figure>
+
+  <div class="wrap pantheon__foot">
+    <div class="pantheon__caption" id="pantheon-caption" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<section class="section journey" data-fx="fire" id="journey" aria-labelledby="journey-title">
+  <div class="wrap">
+    <div class="journey__panel">
+    <h2 id="journey-title">The journey to glory</h2>
+    <ol class="timeline">
+      {% for j in journey %}
+      <li>
+        <time>{{ j.when }}</time>
+        <h3>{{ j.title }}</h3>
+        <p>{{ j.text }}</p>
+      </li>
+      {% endfor %}
+    </ol>
+    </div>
+  </div>
+</section>
+
+<!-- PRIZES -->
+<section class="section section--red" data-fx="fire" id="prizes" aria-labelledby="prizes-title">
+  <div class="wrap">
+    <h2 id="prizes-title">What the gods bestow</h2>
+    <p class="lead">Prize pool of $8,500, plus mentorship, credits and a place at the next Olympus.</p>
+    <div class="podium">
+      {% for p in prizes %}
+      <div class="pillar pillar--{{ p.tone }} pillar--{{ p.h }}">
+        <span class="pillar__place">{{ p.place }}</span>
+        <b class="pillar__amount">{{ p.amount }}</b>
+        <span class="pillar__name">{{ p.name }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    <p class="note">Every track also awards a Patron's Favour for the best project in that domain.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" data-fx="fire" id="faq" aria-labelledby="faq-title">
+  <div class="wrap wrap--narrow">
+    <h2 id="faq-title">Questions mortals ask</h2>
+    {% for q, a in faq %}
+    <details class="faq">
+      <summary>{{ q }}</summary>
+      <p>{{ a }}</p>
+    </details>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ATHENA BANNER -->
+<section class="athena" data-fx="leaf" aria-labelledby="athena-title">
+  <div class="athena__copy">
+    <p class="athena__greek" lang="el" aria-hidden="true">ΣΟΦΙΑ</p>
+    <h2 id="athena-title">Wisdom wins the war</h2>
+    <p>Athena never fought on strength alone. Plan first, then build, then ship. Her track rewards the team with the sharpest idea and the cleanest execution.</p>
+    <a class="btn" href="{{ url_for('track', slug='athena') }}">See Athena's challenges</a>
+  </div>
+</section>
+
+<!-- REGISTER -->
+<section class="section section--ember" data-fx="fire" id="register" aria-labelledby="register-title">
+  <div class="wrap wrap--narrow">
+    <h2 id="register-title">Enter Olympus</h2>
+    <p class="lead">Registration is free. We will email you before the oracle speaks.</p>
+    <form class="form" id="reg-form" novalidate>
+      <div class="field">
+        <label for="name">Full name</label>
+        <input id="name" name="name" autocomplete="name" required>
+        <small class="err" data-for="name"></small>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+        <small class="err" data-for="email"></small>
+      </div>
+      <div class="field">
+        <label for="team">Team name <span class="opt">(optional)</span></label>
+        <input id="team" name="team" maxlength="80">
+      </div>
+      <div class="field">
+        <label for="track">Track</label>
+        <select id="track" name="track" required>
+          <option value="">Choose a god</option>
+          {% for t in tracks %}<option value="{{ t.slug }}">{{ t.god }}: {{ t.domain }}</option>{% endfor %}
+        </select>
+        <small class="err" data-for="track"></small>
+      </div>
+      <div class="field">
+        <label for="level">Experience</label>
+        <select id="level" name="level" required>
+          <option value="">Choose a level</option>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+        <small class="err" data-for="level"></small>
+      </div>
+      <div class="field field--full">
+        <label for="note">Anything we should know? <span class="opt">(optional)</span></label>
+        <textarea id="note" name="note" rows="3" maxlength="500"></textarea>
+      </div>
+      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div class="field--full">
+        <button class="btn" type="submit">Register for free</button>
+        <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

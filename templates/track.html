@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{{ t.god }}: {{ t.domain }} · {{ event.name }}{% endblock %}
+{% block content %}
+<section class="section page-top" data-fx="{{ 'leaf' if t.tone == 'jade' else 'fire' }}">
+  <div class="wrap wrap--narrow">
+    <a class="back" href="{{ url_for('index') }}#pantheon">Back to the pantheon</a>
+    <div class="trackhead trackhead--{{ t.tone }}">
+      <span class="trackhead__letter" aria-hidden="true">{{ t.letter }}</span>
+      <div>
+        <h1>{{ t.god }}</h1>
+        <p class="stele__domain">{{ t.domain }}</p>
+      </div>
+    </div>
+    <p class="lead">{{ t.detail }}</p>
+    <h2 class="h3">Ideas to spark you</h2>
+    <ul class="ideas">
+      {% for i in t.ideas %}<li>{{ i }}</li>{% endfor %}
+    </ul>
+    <a class="btn" href="{{ url_for('index') }}#register">Register for this track</a>
+  </div>
+</section>
+{% endblock %}
